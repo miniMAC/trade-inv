@@ -3,52 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invezz Signals Fetcher</title>
+    <title>Invezz Signals Fetcher - Tutti</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 2rem;
             line-height: 1.6;
+            background: #fafbfc;
+        }
+        .header {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        h1 {
+            color: #1a1a1a;
+            margin: 0 0 0.5rem 0;
+            font-size: 2em;
         }
         button {
-            background: #0066cc;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 14px 28px;
             font-size: 16px;
-            border-radius: 8px;
+            font-weight: 500;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
         button:hover {
-            background: #0052a3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
         button:disabled {
             background: #ccc;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         #results {
             margin-top: 2rem;
         }
         .signal {
-            background: #f8f9fa;
+            background: white;
             border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 1.5rem;
+            border-radius: 12px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+        }
+        .signal:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            transform: translateY(-1px);
+        }
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: 1rem;
         }
         .signal-title {
-            font-size: 1.2em;
+            font-size: 1.3em;
             font-weight: 600;
             color: #212529;
-            margin-bottom: 0.5rem;
-        }
-        .signal-date {
-            color: #6c757d;
-            font-size: 0.95em;
-            margin-bottom: 1rem;
+            margin: 0;
+            flex: 1;
+            line-height: 1.3;
         }
         .signal-link {
             color: #0066cc;
@@ -57,46 +84,102 @@
         .signal-link:hover {
             text-decoration: underline;
         }
+        .signal-meta {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+        }
+        .author-badge {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        .signal-long { border-left: 4px solid #4caf50; }
+        .signal-short { border-left: 4px solid #f44336; }
+        .details-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            color: #666;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .details-toggle:hover {
+            background: #f5f5f5;
+        }
+        .details-content {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
         .loading {
+            text-align: center;
             color: #6c757d;
             font-style: italic;
+            padding: 2rem;
         }
         .error {
             color: #dc3545;
             background: #f8d7da;
             border: 1px solid #f5c6cb;
-            padding: 1rem;
-            border-radius: 8px;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
         }
         pre {
-            background: #f1f3f4;
-            padding: 1rem;
-            border-radius: 4px;
-            font-size: 0.9em;
+            background: #f8f9fa;
+            padding: 1.2rem;
+            border-radius: 8px;
+            font-size: 0.85em;
             overflow-x: auto;
+            border: 1px solid #e9ecef;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .stat {
+            background: #f0f4ff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .signal-header { flex-direction: column; gap: 0.5rem; }
         }
     </style>
 </head>
 <body>
-    <h1>Invezz Trading Signals</h1>
-    <p>Clicca il bottone per caricare gli ultimi segnali di trading dall'autore 401:</p>
-    
-    <button id="fetchBtn">Carica Signals</button>
+    <div class="header">
+        <h1>🎯 Invezz Trading Signals</h1>
+        <p>Tutti gli ultimi segnali di trading da Invezz.com (senza filtro autore):</p>
+        <button id="fetchBtn">🔄 Carica Ultimi Signals</button>
+    </div>
     
     <div id="results"></div>
 
     <script>
-        const url = 'https://invezz.com/wp-json/wp/v2/signals?author=401';
+        const url = 'https://invezz.com/wp-json/wp/v2/signals';
         const btn = document.getElementById('fetchBtn');
         const results = document.getElementById('results');
 
         btn.addEventListener('click', async () => {
             btn.disabled = true;
-            btn.textContent = 'Caricamento...';
-            results.innerHTML = '<div class="loading">Sto caricando i signals...</div>';
+            btn.innerHTML = '⏳ Caricamento...';
+            results.innerHTML = '<div class="loading">📡 Sto recuperando gli ultimi signals da Invezz...</div>';
 
             try {
-                // Per localhost, abilita CORS nel browser o usa estensione
                 const response = await fetch(url, {
                     method: 'GET',
                     headers: {
@@ -111,27 +194,56 @@
                 const signals = await response.json();
                 
                 if (signals.length === 0) {
-                    results.innerHTML = '<div>Nessun signal trovato.</div>';
+                    results.innerHTML = '<div class="loading">Nessun signal trovato al momento.</div>';
                     return;
                 }
 
-                let html = `<h2>${signals.length} signals trovati:</h2>`;
-                
+                const stats = {};
                 signals.forEach(signal => {
-                    const title = signal.title.rendered || 'Titolo non disponibile';
-                    const date = new Date(signal.date).toLocaleDateString('it-IT');
+                    const authorId = signal.author || 'unknown';
+                    stats[authorId] = (stats[authorId] || 0) + 1;
+                });
+
+                let html = `
+                    <div class="stats">
+                        <div class="stat">${signals.length} signals totali</div>
+                `;
+
+                Object.entries(stats).forEach(([author, count]) => {
+                    html += `<div class="stat">Autore ${author}: ${count}</div>`;
+                });
+                html += '</div>';
+
+                signals.forEach(signal => {
+                    const title = signal.title?.rendered || 'Titolo non disponibile';
+                    const date = new Date(signal.date).toLocaleString('it-IT', {
+                        dateStyle: 'medium',
+                        timeStyle: 'short'
+                    });
                     const link = signal.link || '#';
+                    const author = signal.author || 'N/D';
+                    const slug = signal.slug || '';
                     
+                    // Detect Long/Short dal titolo
+                    const isLong = title.toLowerCase().includes('long');
+                    const isShort = title.toLowerCase().includes('short');
+                    const signalClass = isLong ? 'signal-long' : isShort ? 'signal-short' : '';
+
                     html += `
-                        <div class="signal">
-                            <div class="signal-title">
-                                <a href="${link}" class="signal-link" target="_blank">${title}</a>
+                        <div class="signal ${signalClass}">
+                            <div class="signal-header">
+                                <h3 class="signal-title">
+                                    <a href="${link}" class="signal-link" target="_blank" rel="noopener">${title}</a>
+                                </h3>
+                                <div class="signal-meta">
+                                    📅 ${date} | 👤 Autore ${author}
+                                </div>
                             </div>
-                            <div class="signal-date">📅 ${date}</div>
-                            <details>
-                                <summary>ID: ${signal.id} - Slug: ${signal.slug}</summary>
-                                <pre>${JSON.stringify(signal, null, 2)}</pre>
-                            </details>
+                            <div>🔗 Slug: <code>${slug}</code></div>
+                            <button class="details-toggle" onclick="this.parentElement.querySelector('.details-content').classList.toggle('show')">📋 Mostra Dettagli JSON</button>
+                            <div class="details-content">
+                                <pre id="json-${signal.id}">${JSON.stringify(signal, null, 2)}</pre>
+                            </div>
                         </div>
                     `;
                 });
@@ -143,19 +255,18 @@
                 results.innerHTML = `
                     <div class="error">
                         ❌ Errore nel caricamento: ${error.message}
-                        <br><small>
-                            Nota: Per fetch da localhost potresti aver bisogno di:
-                            <ul>
-                                <li>Estensione browser CORS (es: "CORS Unblock")</li>
-                                <li>Usare un server locale (Live Server VSCode, Vite, etc.)</li>
-                                <li>--disable-web-security flag in Chrome</li>
-                            </ul>
-                        </small>
+                        <br><br><strong>Soluzioni per CORS localhost:</strong>
+                        <ul style="text-align: left; display: inline-block;">
+                            <li>🥇 <code>npx vite --open</code> (migliore)</li>
+                            <li>🥈 VS Code "Live Server" extension</li>
+                            <li>🥉 Chrome: <code>--disable-web-security</code></li>
+                            <li>Browser CORS extension</li>
+                        </ul>
                     </div>
                 `;
             } finally {
                 btn.disabled = false;
-                btn.textContent = 'Carica Signals';
+                btn.innerHTML = '🔄 Carica Ultimi Signals';
             }
         });
     </script>
